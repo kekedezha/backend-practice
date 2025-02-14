@@ -5,6 +5,8 @@ import cors from "cors";
 // import express module from express package
 import express from "express";
 
+import { users, messages } from "../data";
+
 // create an instance of an Express application
 // This object will provide methods to define routes,
 // handle middleware and configure the server
@@ -12,20 +14,28 @@ const app = express();
 
 app.use(cors());
 
-app.get("/", (req, res) => {
-  return res.send("Received a GET HTTP method");
+app.get("/users", (req, res) => {
+  return res.send(Object.values(users));
 });
 
-app.post("/", (req, res) => {
-  return res.send("Received a POST HTTP method");
+app.get("/messages", (req, res) => {
+  return res.send(Object.values(messages));
 });
 
-app.put("/", (req, res) => {
-  return res.send("Received a PUT HTTP method");
+app.get("/users/:userId", (req, res) => {
+  return res.send(users[req.params.userId]);
 });
 
-app.delete("/", (req, res) => {
-  return res.send("Received a DELETE HTTP method");
+app.get("/messages/:messageId", (req, res) => {
+  return res.send(messages[req.params.messageId]);
+});
+
+app.post("/users", (req, res) => {
+  return res.send("POST HTTP method on user resource");
+});
+
+app.delete("/users/:userId", (req, res) => {
+  return res.send(`DELETE HTTP method on user/${req.params.userId} resource`);
 });
 
 // have the app start listening for incoming HTTP requests
