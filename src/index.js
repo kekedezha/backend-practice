@@ -8,6 +8,8 @@ import express from "express";
 import { users, messages } from "../data";
 //import v4 function from uuid package
 import { v4 as uuidv4 } from "uuid";
+//import read/write functions
+import { readData, writeData } from "../rw";
 
 // create an instance of an Express application
 // This object will provide methods to define routes,
