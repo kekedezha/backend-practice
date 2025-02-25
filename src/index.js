@@ -24,12 +24,14 @@ app.use(express.json());
 // 'extended: true'  allows parsing of nested objects
 app.use(express.urlencoded({ extended: true }));
 
+// GET route home page
 app.get("/", (req, res) => {
   return res.send(
     "Hello welcome to this back-end example app brought to you by Express.js"
   );
 });
 
+// GET routes to retrieve all users messages, each endpoint has its own route
 app.get("/users", (req, res) => {
   return res.send(Object.values(users));
 });
@@ -38,6 +40,7 @@ app.get("/messages", (req, res) => {
   return res.send(Object.values(messages));
 });
 
+// GET routes for retrieving a single user or a single message
 app.get("/users/:userId", (req, res) => {
   return res.send(users[req.params.userId]);
 });
@@ -46,6 +49,7 @@ app.get("/messages/:messageId", (req, res) => {
   return res.send(messages[req.params.messageId]);
 });
 
+// POST routes to post a new user or a new message
 app.post("/messages", (req, res) => {
   const id = uuidv4();
 
@@ -59,6 +63,16 @@ app.post("/messages", (req, res) => {
   return res.send(message);
 });
 
+// PUT route to update a user or message
+app.put("/users/:userId", (req, res) => {
+  return res.send("PUT HTTP method on user resource");
+});
+
+app.put("/messages/:messageId", (req, res) => {
+  return res.send("PUT HTTP method on message resource");
+});
+
+// DELETE route to delete a user or message for the specified id
 app.delete("/users/:userId", (req, res) => {
   return res.send(`DELETE HTTP method on user/${req.params.userId} resource`);
 });
