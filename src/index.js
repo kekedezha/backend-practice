@@ -24,6 +24,12 @@ app.use(express.json());
 // 'extended: true'  allows parsing of nested objects
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/", (req, res) => {
+  return res.send(
+    "Hello welcome to this back-end example app brought to you by Express.js"
+  );
+});
+
 app.get("/users", (req, res) => {
   return res.send(Object.values(users));
 });
