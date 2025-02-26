@@ -51,16 +51,21 @@ app.get("/messages/:messageId", (req, res) => {
 
 // POST routes to post a new user or a new message
 app.post("/messages", (req, res) => {
+  // create unique id for new message
   const id = uuidv4();
 
   const message = {
     id,
     text: req.body.text,
   };
+  try {
+    writeData(message);
+    return res.send(message);
+  } catch (err) {
+    print(err);
+  }
 
-  messages[id] = message;
-
-  return res.send(message);
+  // return res.send(message);
 });
 
 // PUT route to update a user or message

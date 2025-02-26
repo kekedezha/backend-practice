@@ -2,8 +2,13 @@
 import fs from "fs";
 
 export const readData = () => {
-  const data = fs.readFileSync("./data.json", "utf8");
-  return JSON.parse(data);
+  try {
+    const data = fs.readFileSync("./data.json", "utf8");
+    return JSON.parse(data);
+  } catch (error) {
+    console.error("Error reading data:", error);
+    return { messages: {} };
+  }
 };
 
 export const writeData = (data) => {
