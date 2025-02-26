@@ -9,7 +9,7 @@ import { users, messages } from "../data";
 //import v4 function from uuid package
 import { v4 as uuidv4 } from "uuid";
 //import read/write functions
-import { readData, writeData } from "../rw";
+import { readData, appendData } from "../rw";
 
 // create an instance of an Express application
 // This object will provide methods to define routes,
@@ -58,14 +58,13 @@ app.post("/messages", (req, res) => {
     id,
     text: req.body.text,
   };
+
   try {
-    writeData(message);
+    appendData(message);
     return res.send(message);
   } catch (err) {
-    print(err);
+    console.log(err);
   }
-
-  // return res.send(message);
 });
 
 // PUT route to update a user or message

@@ -11,6 +11,8 @@ export const readData = () => {
   }
 };
 
-export const writeData = (data) => {
+export const appendData = (newData) => {
+  const data = readData();
+  data.messages[newData.id] = newData;
   fs.writeFileSync("./data.json", JSON.stringify(data, null, 2));
 };
