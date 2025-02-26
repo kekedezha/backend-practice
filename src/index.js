@@ -77,6 +77,12 @@ app.delete("/users/:userId", (req, res) => {
   return res.send(`DELETE HTTP method on user/${req.params.userId} resource`);
 });
 
+app.delete("/messages/:messageId", (req, res) => {
+  return res.send(
+    `DELETE HTTP method on message/${req.params.messageId} resource`
+  );
+});
+
 // have the app start listening for incoming HTTP requests
 app.listen(process.env.PORT, () => {
   console.log(`Example app listening on port ${process.env.PORT}`);
