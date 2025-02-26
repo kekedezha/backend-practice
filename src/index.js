@@ -65,11 +65,11 @@ app.post("/messages", (req, res) => {
 
 // PUT route to update a user or message
 app.put("/users/:userId", (req, res) => {
-  return res.send("PUT HTTP method on user resource");
+  return res.send(`PUT HTTP method on user/${req.params.userId} resource`);
 });
 
 app.put("/messages/:messageId", (req, res) => {
-  return res.send("PUT HTTP method on message resource");
+  return res.send(`PUT HTTP method on message/${req.params.userId} resource`);
 });
 
 // DELETE route to delete a user or message for the specified id
