@@ -9,7 +9,7 @@ import { users, messages } from "../data";
 //import v4 function from uuid package
 import { v4 as uuidv4 } from "uuid";
 //import read/write functions
-import { readData, appendData } from "../rw";
+import { readData, appendNewMessage, appendNewUser } from "../rw";
 
 // create an instance of an Express application
 // This object will provide methods to define routes,
@@ -50,6 +50,22 @@ app.get("/messages/:messageId", (req, res) => {
 });
 
 // POST routes to post a new user or a new message
+app.post("/users", (req, res) => {
+  const newUserId =
+    parseInt(Object.values(users)[Object.values(users).length - 1].id) + 1;
+  const user = {
+    id: newUserId.toString(),
+    username: req.body.username,
+  };
+
+  try {
+    appendNewUser(user);
+    return res.send(user);
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 app.post("/messages", (req, res) => {
   // create unique id for new message
   const id = uuidv4();
@@ -61,7 +77,7 @@ app.post("/messages", (req, res) => {
   };
 
   try {
-    appendData(message);
+    appendNewMessage(message);
     return res.send(message);
   } catch (err) {
     console.log(err);
