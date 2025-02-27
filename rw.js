@@ -12,8 +12,14 @@ export const readData = () => {
   }
 };
 
-export const appendData = (newData) => {
+export const appendNewMessage = (newData) => {
   const data = readData();
   data.messages[newData.id] = newData;
+  fs.writeFileSync("./data.json", JSON.stringify(data, null, 2));
+};
+
+export const appendNewUser = (newData) => {
+  const data = readData();
+  data.users[newData.id] = newData;
   fs.writeFileSync("./data.json", JSON.stringify(data, null, 2));
 };
