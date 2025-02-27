@@ -57,6 +57,7 @@ app.post("/messages", (req, res) => {
   const message = {
     id,
     text: req.body.text,
+    userId: req.body.userId,
   };
 
   try {
