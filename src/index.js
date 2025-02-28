@@ -63,6 +63,9 @@ app.post("/users", (req, res) => {
     return res.send(user);
   } catch (err) {
     console.log(err);
+    return res.send(
+      "Sorry, username missing from body. Missing information. Please try again."
+    );
   }
 });
 
@@ -81,6 +84,9 @@ app.post("/messages", (req, res) => {
     return res.send(message);
   } catch (err) {
     console.log(err);
+    return res.send(
+      "Sorry, text and/or userId missing from body. Missing information. Please try again."
+    );
   }
 });
 
