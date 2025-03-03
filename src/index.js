@@ -9,7 +9,7 @@ import { users, messages } from "../data";
 //import v4 function from uuid package
 import { v4 as uuidv4 } from "uuid";
 //import read/write functions
-import { readData, appendNewMessage, appendNewUser } from "../rw";
+import { appendNewMessage, appendNewUser, deleteUser } from "../rw";
 
 // create an instance of an Express application
 // This object will provide methods to define routes,
@@ -23,6 +23,19 @@ app.use(express.json());
 // parse URL-encoded data (from form submissions like 'application/x-www-form-urlencoded)
 // 'extended: true'  allows parsing of nested objects
 app.use(express.urlencoded({ extended: true }));
+
+// middleware to check if user id exists. For all routes that have the "/users/:userId" path
+app.use("/users/:userId", (req, res, next) => {
+  if (
+    Object.values(users).findIndex((user) => user.id == req.params.userId) != -1
+  ) {
+    return next();
+  }
+  return res.send("Sorry no user with that id exists. Try again.");
+});
+
+// middleware to check if message id exists. For all routes that have the "/messages/:messageId" path
+app.use("/messages/:messageId", (req, res, next) => {});
 
 // GET route home page
 app.get("/", (req, res) => {
@@ -105,6 +118,7 @@ app.delete("/users/:userId", (req, res) => {
 });
 
 app.delete("/messages/:messageId", (req, res) => {
+  deleteUser(req.params.messageId);
   return res.send(
     `DELETE HTTP method on message/${req.params.messageId} resource`
   );
