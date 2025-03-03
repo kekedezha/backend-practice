@@ -60,3 +60,24 @@ export const deleteMessage = (messageId) => {
 
   fs.writeFileSync("./data.json", JSON.stringify(data, null, 2));
 };
+
+export const updateUser = (userId, newUsername) => {
+  // Read in data from data.json file
+  const data = readData();
+
+  data.users[userId] = newUsername;
+  fs.writeFileSync("./data.json", JSON.stringify(data, null, 2));
+};
+
+export const updateMessage = (messageId, newText = null, newUser = null) => {
+  // Read in data from data.json file
+  const data = readData();
+
+  if (newText != null && newUser == null) {
+    data.messages[messageId].text = newText;
+  } else if (newText == null && newUser != null) {
+    data.messages[messageId].userId = newUser;
+  }
+
+  fs.writeFileSync("./data.json", JSON.stringify(data, null, 2));
+};
