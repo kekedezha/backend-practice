@@ -24,18 +24,33 @@ app.use(express.json());
 // 'extended: true'  allows parsing of nested objects
 app.use(express.urlencoded({ extended: true }));
 
-// middleware to check if user id exists. For all routes that have the "/users/:userId" path
-app.use("/users/:userId", (req, res, next) => {
-  if (
-    Object.values(users).findIndex((user) => user.id == req.params.userId) != -1
-  ) {
-    return next();
+// middleware to check if user id exists. For all routes that have the "userId" param
+app.param("userId", (req, res, next, userId) => {
+  const user = Object.values(users).find((user) => user.id == userId);
+
+  if (!user) {
+    return res
+      .status(404)
+      .send("Sorry, no user with that id exists. Try again.");
   }
-  return res.send("Sorry no user with that id exists. Try again.");
+
+  next();
 });
 
 // middleware to check if message id exists. For all routes that have the "/messages/:messageId" path
-app.use("/messages/:messageId", (req, res, next) => {});
+app.param("messageId", (req, res, next, messageId) => {
+  const message = Object.values(messages).find(
+    (message) => message.id == messageId
+  );
+
+  if (!message) {
+    return res
+      .status(404)
+      .send("Sorry, no message with thad id exists. Try again.");
+  }
+
+  next();
+});
 
 // GET route home page
 app.get("/", (req, res) => {
