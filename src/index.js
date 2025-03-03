@@ -9,7 +9,14 @@ import { users, messages } from "../data";
 //import v4 function from uuid package
 import { v4 as uuidv4 } from "uuid";
 //import read/write functions
-import { appendNewMessage, appendNewUser, deleteUser } from "../rw";
+import {
+  appendNewMessage,
+  appendNewUser,
+  deleteMessage,
+  deleteUser,
+  updateUser,
+  updateMessage,
+} from "../rw";
 
 // create an instance of an Express application
 // This object will provide methods to define routes,
@@ -81,20 +88,21 @@ app.get("/messages/:messageId", (req, res) => {
 app.post("/users", (req, res) => {
   const newUserId =
     parseInt(Object.values(users)[Object.values(users).length - 1].id) + 1;
+
   const user = {
     id: newUserId.toString(),
     username: req.body.username,
   };
 
-  try {
-    appendNewUser(user);
-    return res.send(user);
-  } catch (err) {
-    console.log(err);
-    return res.send(
-      "Sorry, username missing from body. Missing information. Please try again."
-    );
+  if (user.username.trim() == "") {
+    return res
+      .status(400)
+      .send(
+        "Sorry, username missing from body. Missing information. Please try again."
+      );
   }
+  appendNewUser(user);
+  return res.send(user);
 });
 
 app.post("/messages", (req, res) => {
@@ -107,19 +115,22 @@ app.post("/messages", (req, res) => {
     userId: req.body.userId,
   };
 
-  try {
-    appendNewMessage(message);
-    return res.send(message);
-  } catch (err) {
-    console.log(err);
-    return res.send(
-      "Sorry, text and/or userId missing from body. Missing information. Please try again."
-    );
+  if (message.text.trim() == "" || message.userId.trim() == "") {
+    return res
+      .status(400)
+      .send(
+        "Sorry, text and/or userId missing from body. Missing information. Please try again."
+      );
   }
+
+  appendNewMessage(message);
+  return res.send(message);
 });
 
 // PUT route to update a user or message
 app.put("/users/:userId", (req, res) => {
+  const newUsername = req.body.username;
+
   return res.send(`PUT HTTP method on user/${req.params.userId} resource`);
 });
 
@@ -129,11 +140,12 @@ app.put("/messages/:messageId", (req, res) => {
 
 // DELETE route to delete a user or message for the specified id
 app.delete("/users/:userId", (req, res) => {
+  deleteUser(req.params.userId);
   return res.send(`DELETE HTTP method on user/${req.params.userId} resource`);
 });
 
 app.delete("/messages/:messageId", (req, res) => {
-  deleteUser(req.params.messageId);
+  deleteMessage(req.params.messageId);
   return res.send(
     `DELETE HTTP method on message/${req.params.messageId} resource`
   );
