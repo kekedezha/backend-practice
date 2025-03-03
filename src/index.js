@@ -129,12 +129,37 @@ app.post("/messages", (req, res) => {
 
 // PUT route to update a user or message
 app.put("/users/:userId", (req, res) => {
+  const userId = req.params.userId;
   const newUsername = req.body.username;
 
+  if (newUsername.trim() == "") {
+    return res
+      .status(400)
+      .send(
+        "Sorry, username missing from body. Missing information. Please try again."
+      );
+  }
+  updateUser(userId, newUsername);
   return res.send(`PUT HTTP method on user/${req.params.userId} resource`);
 });
 
 app.put("/messages/:messageId", (req, res) => {
+  const messageId = req.params.messageId;
+  const newText = req.body.text;
+  const newUser = req.body.userId;
+
+  if (newText.trim() == "" && newUser.trim() == "") {
+    return res
+      .status(400)
+      .send(
+        "Sorry, text and userId missing from body. Missing information. Please try again."
+      );
+  } else if (newText.trim() == "") {
+    updateMessage(messageId, null, newUser);
+  } else if (newUser.trim() == "") {
+    updateMessage(messageId, newText, null);
+  }
+
   return res.send(`PUT HTTP method on message/${req.params.userId} resource`);
 });
 
