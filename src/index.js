@@ -130,7 +130,11 @@ app.post("/messages", (req, res) => {
 // PUT route to update a user or message
 app.put("/users/:userId", (req, res) => {
   const userId = req.params.userId;
-  const newUsername = req.body.username;
+  let newUsername;
+
+  if (req.body.username != undefined) {
+    newUsername = req.body.username;
+  }
 
   if (newUsername.trim() == "") {
     return res
@@ -145,8 +149,15 @@ app.put("/users/:userId", (req, res) => {
 
 app.put("/messages/:messageId", (req, res) => {
   const messageId = req.params.messageId;
-  const newText = req.body.text;
-  const newUser = req.body.userId;
+  let newText = "";
+  let newUser = "";
+
+  if (req.body.text != undefined) {
+    newText = req.body.text;
+  }
+  if (req.body.userId != undefined) {
+    newUser = req.body.userId;
+  }
 
   if (newText.trim() == "" && newUser.trim() == "") {
     return res
@@ -160,7 +171,9 @@ app.put("/messages/:messageId", (req, res) => {
     updateMessage(messageId, newText, null);
   }
 
-  return res.send(`PUT HTTP method on message/${req.params.userId} resource`);
+  return res.send(
+    `PUT HTTP method on message/${req.params.messageId} resource`
+  );
 });
 
 // DELETE route to delete a user or message for the specified id
