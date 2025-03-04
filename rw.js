@@ -65,7 +65,7 @@ export const updateUser = (userId, newUsername) => {
   // Read in data from data.json file
   const data = readData();
 
-  data.users[userId] = newUsername;
+  data.users[userId].username = newUsername;
   fs.writeFileSync("./data.json", JSON.stringify(data, null, 2));
 };
 
