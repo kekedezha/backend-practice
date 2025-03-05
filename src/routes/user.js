@@ -5,7 +5,9 @@ import { appendNewUser, deleteUser, updateUser } from "../../rw";
 const router = Router();
 
 router.param("userId", (req, res, next, userId) => {
-  const user = Object.values(users).find((user) => user.id == userId);
+  const user = Object.values(req.context.users).find(
+    (user) => user.id == userId
+  );
 
   if (!user) {
     return res
@@ -23,7 +25,7 @@ router.get("/", (req, res) => {
 
 // GET routes for retrieving a single user or a single message
 router.get("/:userId", (req, res) => {
-  return res.send(users[req.params.userId]);
+  return res.send(req.context.users[req.params.userId]);
 });
 
 // POST routes to post a new user or a new message
