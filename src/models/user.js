@@ -10,12 +10,25 @@ const getUserModel = (sequelize, { DataTypes }) => {
     },
   });
 
+  //user method for association
   User.associate = (models) => {
     //User has a 1 to N relationship with Messages model
     //on user deletion, cascade delete all messages
     User.hasMany(models.Message, { onDelete: "CASCADE" });
   };
 
+  //user method to find user by 'login' term which would be username or email
+  User.findByLogin = async (login) => {
+    let user = await User.findOne({
+      where: { username: login },
+    });
+
+    if (!user) {
+      user = await User.findOne({
+        where: { email: login },
+      });
+    }
+  };
   return User;
 };
 
