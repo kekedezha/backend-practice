@@ -4,6 +4,8 @@ import "dotenv/config";
 import cors from "cors";
 // import express module from express package
 import express from "express";
+// import the sequelize instance
+import models, { sequelize } from "./models";
 // import mock data from data.js file
 import { users, messages } from "./models/data";
 // import routes
@@ -39,6 +41,8 @@ app.get("/", (req, res) => {
 });
 
 // have the app start listening for incoming HTTP requests
-app.listen(process.env.PORT, () => {
-  console.log(`Example app listening on port ${process.env.PORT}`);
+sequelize.sync().then(() => {
+  app.listen(process.env.PORT, () => {
+    console.log(`Example app listening on port ${process.env.PORT}`);
+  });
 });
