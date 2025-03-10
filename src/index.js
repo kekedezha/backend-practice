@@ -14,6 +14,7 @@ import routes from "./routes";
 // This object will provide methods to define routes,
 // handle middleware and configure the server
 const app = express();
+const eraseDatabaseOnSync = true; // boolean constant that allows database to re-initialize on every Express server start/re-start
 
 // initialize basic cors config
 app.use(cors());
@@ -41,7 +42,7 @@ app.get("/", (req, res) => {
 });
 
 // have the app start listening for incoming HTTP requests
-sequelize.sync().then(() => {
+sequelize.sync({ force: eraseDatabaseOnSync }).then(() => {
   app.listen(process.env.PORT, () => {
     console.log(`Example app listening on port ${process.env.PORT}`);
   });
