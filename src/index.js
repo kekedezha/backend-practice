@@ -83,15 +83,20 @@ const createUsersWithMessages = async () => {
     }
   );
 
-  await models.User.create({
-    username: "cdezha",
-    messages: [
-      {
-        text: "Hola mundo! Como estan?",
-      },
-      {
-        text: "Este proyecto es para practicar la configuracion de un back-end server usando el lenguaje de Node.js con la estructura de Express.",
-      },
-    ],
-  });
+  await models.User.create(
+    {
+      username: "cdezha",
+      messages: [
+        {
+          text: "Hola mundo! Como estan?",
+        },
+        {
+          text: "Este proyecto es para practicar la configuracion de un back-end server usando el lenguaje de Node.js con la estructura de Express.",
+        },
+      ],
+    },
+    {
+      include: [models.Message],
+    }
+  );
 };
