@@ -8,7 +8,7 @@ const router = Router();
 
 // middleware to check if message id exists. For all routes that have the "/messages/:messageId" path
 router.param("messageId", (req, res, next, messageId) => {
-  const message = Object.values(req.context.messages).find(
+  const message = Object.values(req.context.models.Message).find(
     (message) => message.id == messageId
   );
 
@@ -22,11 +22,11 @@ router.param("messageId", (req, res, next, messageId) => {
 });
 
 router.get("/", (req, res) => {
-  return res.send(Object.values(req.context.messages));
+  return res.send(Object.values(req.context.models.Message));
 });
 
 router.get("/:messageId", (req, res) => {
-  return res.send(req.context.messages[req.params.messageId]);
+  return res.send(req.context.models.Message[req.params.messageId]);
 });
 
 router.post("/", (req, res) => {
