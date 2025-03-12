@@ -26,8 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   req.context = {
-    users,
-    messages,
+    models,
   };
   next();
 });
