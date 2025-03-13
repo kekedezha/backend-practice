@@ -6,8 +6,6 @@ import cors from "cors";
 import express from "express";
 // import the sequelize instance
 import models, { sequelize } from "./models";
-// import mock data from data.js file
-import { users, messages } from "./models/data";
 // import routes
 import routes from "./routes";
 // create an instance of an Express application
@@ -24,9 +22,11 @@ app.use(express.json());
 // 'extended: true'  allows parsing of nested objects
 app.use(express.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
+// middleware that passes database data into req.context object and retrieves specified user as 'me'
+app.use(async (req, res, next) => {
   req.context = {
     models,
+    me: await models.User.findByLogin("cdezha"),
   };
   next();
 });
