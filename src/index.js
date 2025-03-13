@@ -23,6 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // middleware that passes database data into req.context object and retrieves specified user as 'me'
+// just retrieving a user we know is is databases from seeded data, since nothing coming from outside the API
 app.use(async (req, res, next) => {
   req.context = {
     models,
