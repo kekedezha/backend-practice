@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 
-import getMessageModel from "./model";
+import getMessageModel from "./message";
 import getUserModel from "./user";
 
 const sequelize = new Sequelize(
