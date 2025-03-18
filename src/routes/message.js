@@ -1,90 +1,40 @@
+// import the router class from the express module to create modular route handlers
 import { Router } from "express";
-// import read/write functions
-import { appendNewMessage, deleteMessage, updateMessage } from "../../rw";
-//import v4 function from uuid package
-import { v4 as uuidv4 } from "uuid";
 
+// initialize a router instance to use with message routes
 const router = Router();
 
-// middleware to check if message id exists. For all routes that have the "/messages/:messageId" path
-router.param("messageId", (req, res, next, messageId) => {
-  const message = Object.values(req.context.models.Message).find(
-    (message) => message.id == messageId
+// GET route to retrieve all messages from db
+router.get("/", async (req, res) => {
+  const messages = await req.context.models.Message.findAll();
+  return res.send(messages);
+});
+
+// GET route to retrieve message specified by messageId
+router.get("/:messageId", async (req, res) => {
+  const message = await req.context.models.Message.findByPk(
+    req.params.messageId
   );
-
-  if (!message) {
-    return res
-      .status(404)
-      .send("Sorry, no message with thad id exists. Try again.");
-  }
-
-  next();
-});
-
-router.get("/", (req, res) => {
-  return res.send(Object.values(req.context.models.Message));
-});
-
-router.get("/:messageId", (req, res) => {
-  return res.send(req.context.models.Message[req.params.messageId]);
-});
-
-router.post("/", (req, res) => {
-  // create unique id for new message
-  const id = uuidv4();
-
-  const message = {
-    id,
-    text: req.body.text,
-    userId: req.body.userId,
-  };
-
-  if (message.text.trim() == "" || message.userId.trim() == "") {
-    return res
-      .status(400)
-      .send(
-        "Sorry, text and/or userId missing from body. Missing information. Please try again."
-      );
-  }
-
-  appendNewMessage(message);
   return res.send(message);
 });
 
-router.put("/:messageId", (req, res) => {
-  const messageId = req.params.messageId;
-  let newText = "";
-  let newUser = "";
+// POST route to add message to db
+router.post("/", async (req, res) => {
+  const message = await req.context.models.Message.create({
+    text: req.body.text,
+    userId: req.context.me.id,
+  });
 
-  if (req.body.text != undefined) {
-    newText = req.body.text;
-  }
-  if (req.body.userId != undefined) {
-    newUser = req.body.userId;
-  }
-
-  if (newText.trim() == "" && newUser.trim() == "") {
-    return res
-      .status(400)
-      .send(
-        "Sorry, text and userId missing from body. Missing information. Please try again."
-      );
-  } else if (newText.trim() == "") {
-    updateMessage(messageId, null, newUser);
-  } else if (newUser.trim() == "") {
-    updateMessage(messageId, newText, null);
-  }
-
-  return res.send(
-    `PUT HTTP method on message/${req.params.messageId} resource`
-  );
+  return res.send(message);
 });
 
-router.delete("/:messageId", (req, res) => {
-  deleteMessage(req.params.messageId);
-  return res.send(
-    `DELETE HTTP method on message/${req.params.messageId} resource`
-  );
+// DELETE route to delete message from db
+router.delete("/:messageId", async (req, res) => {
+  const result = await req.context.models.Message.destroy({
+    where: { id: req.params.messageId },
+  });
+
+  return res.send(true);
 });
 
 export default router;
